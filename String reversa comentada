@@ -1,0 +1,36 @@
+.data
+str: 
+.text
+#Contagem do tamanho da string
+MAIN:
+	li a7, 8      #Syscall para ler uma string
+	li a1, 50     #Tamanho da string
+	la a0, str    #str vai receber a string digitada
+	ecall
+	li t0, 0     #Contador do tamanho
+	li s0, 10   #recebe o \n, ou seja, quando o contador deve parar
+strlen:
+	add t1, t0, a0    #t1 ta recebendo o caractere que esta no endereço 0 da string
+	lb t1, 0(t1)      #t1 ta carregando o endereço asc em t1, pois cada caractere asc tem 1 byte
+	beq t1, s0, SAI   #Se o acractere for 0 \n ele sai do loop
+	addi t0, t0, 1    #Adiciona 1 ao contador
+	j strlen
+SAI:
+	mv s1, t0    #s1 recebe o tamanho da string
+MAIN_REV:
+	addi, s1, s1, -1  #Pois o len começa do 1, já a string começa do 0
+	la t2, str      #t2 recebe a string
+	add s2, s1, t2  #s2 recebe o último endereço da string
+	li t0, 0        #Contador dnv
+	li a7, 11       #printar os caracteres
+LOOPPRINT:
+	add t3, s2, t0 #Começa do último endereço
+	lb t3, 0(t3)   #Carrega o ultimo caractere em t4
+	beq t3, zero, ACABOU    #Se o caractere for o \0 acaba o loop de printar
+	mv a0, t3               #a0 q é responsável por receber o caractere que vai ser printado
+	ecall
+	addi t0, t0, -1         #contador diminui um para começar a ler a string de tras pra frente
+	j LOOPPRINT              #Volta pro Loop de printar
+ACABOU:
+	li a7, 10                 #Exit
+	ecall
