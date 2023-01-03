@@ -1,0 +1,29 @@
+.data
+
+
+.text
+MAIN:	
+	li a7, 5
+	ecall
+	mv t0, a0   #Primeiro número
+	li a7, 5
+	ecall
+	mv t1, a0   #Segundo número
+	li s0, 0    #Soma
+	li t3, 2    #Meu comparador
+SOMAX:
+	rem t2, t0, t3   #resto dividido por 2
+	beqz t2, ADICIONAR
+	bgt t0, t1, FIM
+	add s0, s0, t0
+	
+ADICIONAR:
+	addi t0, t0, 1
+	j SOMAX	
+FIM:
+	li a7, 1
+	mv a0, s0
+	ecall
+	li a7, 10
+	ecall
+
